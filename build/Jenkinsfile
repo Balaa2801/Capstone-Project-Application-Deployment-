@@ -20,17 +20,21 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
+                    echo "Starting Docker image tagging and pushing"
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
                         echo "Logging into Docker Hub"
-                        sh "docker login -u balaji8122 -p $DOCKER_HUB_PASSWORD" // Replace DOCKER_HUB_USERNAME with balaji8122
+                        sh "docker login -u balaji8122 -p $DOCKER_HUB_PASSWORD"
+                        echo "Docker login successful"
                         if (env.BRANCH_NAME == 'dev') {
                             echo "Tagging and pushing Docker image to dev repository"
-                            sh "docker tag my-app:latest balaji8122/dev:latest" // Replace DOCKER_HUB_USERNAME with balaji8122
-                            sh "docker push balaji8122/dev:latest" // Replace DOCKER_HUB_USERNAME with balaji8122
+                            sh "docker tag my-app:latest balaji8122/dev:latest"
+                            sh "docker push balaji8122/dev:latest"
+                            echo "Docker image tagged and pushed to dev repository"
                         } else if (env.BRANCH_NAME == 'master') {
                             echo "Tagging and pushing Docker image to prod repository"
-                            sh "docker tag my-app:latest balaji8122/prod:latest" // Replace DOCKER_HUB_USERNAME with balaji8122
-                            sh "docker push balaji8122/prod:latest" // Replace DOCKER_HUB_USERNAME with balaji8122
+                            sh "docker tag my-app:latest balaji8122/prod:latest"
+                            sh "docker push balaji8122/prod:latest"
+                            echo "Docker image tagged and pushed to prod repository"
                         }
                     }
                 }
@@ -48,12 +52,6 @@ pipeline {
                     }
                 }
             }
-        }
-    }
-
-    post {
-        always {
-            cleanWs()
         }
     }
 }
