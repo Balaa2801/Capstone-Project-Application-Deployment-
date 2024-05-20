@@ -11,7 +11,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-		    sh 'chmod +x build/build.sh'
+                    sh 'chmod +x build/build.sh'
                     sh './build/build.sh'
                 }
             }
@@ -20,17 +20,17 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    if (env.BRANCH_NAME == 'dev') {
-                        withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
-                            sh "docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD"
-                            sh "docker tag my-app:latest $DOCKER_HUB_USERNAME/dev:latest"
-                            sh "docker push $DOCKER_HUB_USERNAME/dev:latest"
-                        }
-                    } else if (env.BRANCH_NAME == 'master') {
-                        withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
-                            sh "docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD"
-                            sh "docker tag my-app:latest $DOCKER_HUB_USERNAME/prod:latest"
-                            sh "docker push $DOCKER_HUB_USERNAME/prod:latest"
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
+                        echo "Logging into Docker Hub"
+                        sh "docker login -u balaji8122 -p $DOCKER_HUB_PASSWORD" // Replace DOCKER_HUB_USERNAME with balaji8122
+                        if (env.BRANCH_NAME == 'dev') {
+                            echo "Tagging and pushing Docker image to dev repository"
+                            sh "docker tag my-app:latest balaji8122/dev:latest" // Replace DOCKER_HUB_USERNAME with balaji8122
+                            sh "docker push balaji8122/dev:latest" // Replace DOCKER_HUB_USERNAME with balaji8122
+                        } else if (env.BRANCH_NAME == 'master') {
+                            echo "Tagging and pushing Docker image to prod repository"
+                            sh "docker tag my-app:latest balaji8122/prod:latest" // Replace DOCKER_HUB_USERNAME with balaji8122
+                            sh "docker push balaji8122/prod:latest" // Replace DOCKER_HUB_USERNAME with balaji8122
                         }
                     }
                 }
@@ -40,7 +40,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-		    sh 'chmod +x build/deploy.sh'
+                    sh 'chmod +x build/deploy.sh'
                     if (env.BRANCH_NAME == 'dev') {
                         sh './build/deploy.sh dev'
                     } else if (env.BRANCH_NAME == 'master') {
