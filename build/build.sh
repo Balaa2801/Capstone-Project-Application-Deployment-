@@ -4,5 +4,5 @@
 cd "$(dirname "$0")" || exit
 
 # Build Docker image
-docker-compose build
+docker-compose build build_web
 
