@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_USERNAME = 'balaji8122'
         DOCKER_HUB_PASSWORD = credentials('docker-hub-password')
     }
 
@@ -30,20 +29,20 @@ pipeline {
             steps {
                 script {
                     echo "Starting Docker image tagging and pushing"
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-username', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
-                        sh "echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin"
+                    withCredentials([string(credentialsId: 'docker-hub-password', variable: 'DOCKER_HUB_PASSWORD')]) {
+                        sh "echo $DOCKER_HUB_PASSWORD | docker login -u balaji8122 --password-stdin"
                         echo "Docker login successful"
                         echo "Branch name: ${env.BRANCH_NAME}"
 
                         if (env.BRANCH_NAME == 'dev') {
                             echo "Tagging and pushing Docker image to dev repository"
-                            sh "docker tag build_web:latest $DOCKER_HUB_USERNAME/dev:latest"
-                            sh "docker push $DOCKER_HUB_USERNAME/dev:latest"
+                            sh "docker tag build_web:latest balaji8122/dev:latest"
+                            sh "docker push balaji8122/dev:latest"
                             echo "Docker image tagged and pushed to dev repository"
                         } else if (env.BRANCH_NAME == 'master') {
                             echo "Tagging and pushing Docker image to prod repository"
-                            sh "docker tag build_web:latest $DOCKER_HUB_USERNAME/prod:latest"
-                            sh "docker push $DOCKER_HUB_USERNAME/prod:latest"
+                            sh "docker tag build_web:latest balaji8122/prod:latest"
+                            sh "docker push balaji8122/prod:latest"
                             echo "Docker image tagged and pushed to prod repository"
                         } else {
                             echo "Branch name not recognized: ${env.BRANCH_NAME}"
