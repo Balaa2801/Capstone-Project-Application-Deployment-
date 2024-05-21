@@ -56,7 +56,7 @@ pipeline {
             steps {
                 script {
                     sh 'chmod +x build/deploy.sh'
-                    echo "Current directory: $(pwd)"
+                    echo "Current directory: ${pwd()}"
                     echo "Listing files in current directory:"
                     sh 'ls -l'
                     echo "Listing files in build directory:"
