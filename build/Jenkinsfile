@@ -56,6 +56,11 @@ pipeline {
             steps {
                 script {
                     sh 'chmod +x build/deploy.sh'
+                    echo "Current directory: $(pwd)"
+                    echo "Listing files in current directory:"
+                    sh 'ls -l'
+                    echo "Listing files in build directory:"
+                    sh 'ls -l build'
                     if (env.BRANCH_NAME == 'dev') {
                         sh './build/deploy.sh dev'
                     } else if (env.BRANCH_NAME == 'master') {
