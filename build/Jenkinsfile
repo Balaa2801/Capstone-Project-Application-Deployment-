@@ -10,6 +10,10 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+                script {
+                    env.BRANCH_NAME = env.GIT_BRANCH.replaceFirst(/^origin\//, '')
+                    echo "Branch name: ${env.BRANCH_NAME}"
+                }
             }
         }
 
@@ -29,7 +33,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'docker-hub-username', variable: 'DOCKER_HUB_USERNAME'), string(credentialsId: 'docker-hub-password', variable: 'DOCKER_HUB_PASSWORD')]) {
                         sh "docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD"
                         echo "Docker login successful"
-                        echo "Branch name: ${env.BRANCH_NAME}" // Add this line for debugging
+                        echo "Branch name: ${env.BRANCH_NAME}" // Debugging line
 
                         if (env.BRANCH_NAME == 'dev') {
                             echo "Tagging and pushing Docker image to dev repository"
@@ -42,7 +46,7 @@ pipeline {
                             sh "docker push $DOCKER_HUB_USERNAME/prod:latest"
                             echo "Docker image tagged and pushed to prod repository"
                         } else {
-                            echo "Branch name not recognized: ${env.BRANCH_NAME}" // Add this line for debugging
+                            echo "Branch name not recognized: ${env.BRANCH_NAME}" // Debugging line
                         }
                     }
                 }
