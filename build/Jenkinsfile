@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_HUB_USERNAME = credentials('docker-hub-username')
+        DOCKER_HUB_PASSWORD = credentials('docker-hub-password')
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -21,19 +26,18 @@ pipeline {
             steps {
                 script {
                     echo "Starting Docker image tagging and pushing"
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
-                        echo "Logging into Docker Hub"
-                        sh "docker login -u balaji8122 -p $DOCKER_HUB_PASSWORD"
+                    withCredentials([string(credentialsId: 'docker-hub-username', variable: 'DOCKER_HUB_USERNAME'), string(credentialsId: 'docker-hub-password', variable: 'DOCKER_HUB_PASSWORD')]) {
+                        sh "docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD"
                         echo "Docker login successful"
                         if (env.BRANCH_NAME == 'dev') {
                             echo "Tagging and pushing Docker image to dev repository"
-                            sh "docker tag my-app:latest balaji8122/dev:latest"
-                            sh "docker push balaji8122/dev:latest"
+                            sh "docker tag my-app:latest $DOCKER_HUB_USERNAME/dev:latest"
+                            sh "docker push $DOCKER_HUB_USERNAME/dev:latest"
                             echo "Docker image tagged and pushed to dev repository"
                         } else if (env.BRANCH_NAME == 'master') {
                             echo "Tagging and pushing Docker image to prod repository"
-                            sh "docker tag my-app:latest balaji8122/prod:latest"
-                            sh "docker push balaji8122/prod:latest"
+                            sh "docker tag my-app:latest $DOCKER_HUB_USERNAME/prod:latest"
+                            sh "docker push $DOCKER_HUB_USERNAME/prod:latest"
                             echo "Docker image tagged and pushed to prod repository"
                         }
                     }
@@ -52,6 +56,12 @@ pipeline {
                     }
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
         }
     }
 }
