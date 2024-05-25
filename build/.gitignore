@@ -1,0 +1,10 @@
+# Ignore any log files
+*.log
+
+# Ignore any source maps if present
+*.map
+
+# Ignore any temporary files or folders
+*.tmp
+*.temp
+
