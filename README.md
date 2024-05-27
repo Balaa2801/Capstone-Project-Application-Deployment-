@@ -10,7 +10,7 @@ Jenkins url:  http://3.108.42.146:8080
 Docker Image Name :  build_web (ID 08fa8702cf14)
 docker image id:  08fa8702cf14 (prod)  562d5c8f88f0 (dev)
 
-I have written the required files to build the run like docerkfile, docker-compose.yml file, build.sh and deploy.sh.
+Forked the given repo. Then, I have written the required files to build the run like docerkfile, docker-compose.yml file, build.sh and deploy.sh.
 Then I have created the ec2 ubuntu instance and installed the docker and Jenkins on it. 
 Once it is installed, I then configured Jenkins and successful configuration of Jenkins I have created the new pipleline project 
 where I have configured the capstone project and given all the required information 
