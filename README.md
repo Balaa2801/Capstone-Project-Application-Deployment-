@@ -3,12 +3,17 @@ Project Overview:
 This project automates the process of building, testing, and deploying a web application using Docker, Jenkins, and AWS EC2. Below are the relevant links and details for accessing the project:
 
 Relevant Links:
-Google Drive: Access screenshots and documentation
+Google Drive:
+https://drive.google.com/drive/folders/1jj65T6As3aVvLB-IM1zCKT12b_Wajm2e?usp=sharing
 GitHub Repository:
-Master Branch
-Dev Branch
-Deployed Site URL: http://3.108.42.146:80
-Jenkins URL: http://3.108.42.146:8080
+Master Branch:
+https://github.com/Balaa2801/devops-build
+Dev Branch:
+https://github.com/Balaa2801/devops-build/tree/dev
+Deployed Site URL:
+http://3.108.42.146:80
+Jenkins URL:
+http://3.108.42.146:8080
 Docker Image Name: build_web
 Prod Image ID: 08fa8702cf14
 Dev Image ID: 562d5c8f88f0
